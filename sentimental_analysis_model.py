@@ -1,40 +1,104 @@
+##Collecting data
 import pandas as pd
+
+##Text preprocessing
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+##Regular functions
 import re
 
-# Leer los archivos de texto
+##DummyClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.dummy import DummyClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, cohen_kappa_score
+
+
+##Gather the dataset for sentiment analysis from the UCI Machine Learning Repository
+# Read text files
 file1 = pd.read_csv("sentiment_labelled_sentences/amazon_cells_labelled.txt", sep="\t", header=None)
 file2 = pd.read_csv("sentiment_labelled_sentences/imdb_labelled.txt", sep="\t", header=None)
 file3 = pd.read_csv("sentiment_labelled_sentences/yelp_labelled.txt", sep="\t", header=None)
 
-#Mostrar el tamaño de cada file leido para verificar (incompletos en el file2, error de origen de la bd)
-print("Número de filas en file1:", len(file1))
-print("Número de filas en file2:", len(file2))
-print("Número de filas en file3:", len(file3))
+#Check the size of each read file (incomplete in file2, database source error)
+print("Number of rows in file1:", len(file1))
+print("Number of rows in file2:", len(file2))
+print("Number of rows in file3:", len(file3))
 
-# Concatenar los tres archivos
+# Concatenate the three files
 combined_df = pd.concat([file1, file2, file3], ignore_index=True)
 combined_df.columns = ["Phrase", "tag"]
 
-#Imprimir combined_df
-print(combined_df)
+#Print initial combined_df
+#print(combined_df)
 
-# Función para limpiar el texto
+##Preprocess the text data, including tokenization, lowercasing, and removing stopwords.
+# Function to clean text (regular expressions)
 def clean_text(text):
-    text = re.sub(r'[^\w\s]', '', text)  # Eliminar caracteres especiales y puntuación
+    text = re.sub(r'[^\w\s]', '', text)  # Remove special characters and punctuation
     return text
 
-# Aplicar limpieza y tokenización para palabras en inglés
+# Apply cleaning and tokenization for English words
 combined_df['Cleaned_Phrase'] = combined_df['Phrase'].apply(clean_text)
 combined_df['Tokenized_Phrase'] = combined_df['Cleaned_Phrase'].apply(word_tokenize)
 combined_df['Tokenized_Phrase'] = combined_df['Tokenized_Phrase'].apply(lambda x: [word.lower() for word in x])
 
-# Descargar y eliminar palabras vacías en inglés
+# Download and remove English stopwords
 nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
 combined_df['Tokenized_Phrase'] = combined_df['Tokenized_Phrase'].apply(lambda x: [word for word in x if word not in stop_words])
 
-# Imprimir el dataframe con las frases originales y las palabras preprocesadas en inglés
+# Print the dataframe with original phrases and preprocessed English words
 print(combined_df[['Phrase', 'Tokenized_Phrase']])
+
+##Implement a DummyClassifier.
+
+# Assume 'X' are the preprocessed features and 'y' are the labels
+X = combined_df['Tokenized_Phrase']
+y = combined_df['tag']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+#Create a DummyClassifier
+# Strategy: predict the most frequent class
+dummy_clf = DummyClassifier(strategy="most_frequent")  
+
+#Train the model
+dummy_clf.fit(X_train, y_train)
+
+#Make predictions on the test set
+y_pred = dummy_clf.predict(X_test)
+
+#Calculate evaluation metrics (Test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+kappa = cohen_kappa_score(y_test, y_pred)
+
+#Show results of test set metrics
+print('\n'+'Metrics for test set'+'\n')
+print(f"Accuracy Test: {accuracy}")
+print(f"Precision Test: {precision}")
+print(f"Recall Test: {recall}")
+print(f"F1 Score Test: {f1}")
+print(f"Kappa Test: {kappa}")
+
+#Calculate evaluation metrics (Train)
+y_pred_train = dummy_clf.predict(X_train)
+
+#Calculate evaluation metrics (Train)
+accuracy = accuracy_score(y_train, y_pred_train)
+precision = precision_score(y_train, y_pred_train)
+recall = recall_score(y_train, y_pred_train)
+f1 = f1_score(y_train, y_pred_train)
+kappa = cohen_kappa_score(y_train, y_pred_train)
+
+#Show results of train set metrics
+print('\n'+'Metrics for train set'+'\n')
+print(f"Accuracy Train: {accuracy}")
+print(f"Precision Train: {precision}")
+print(f"Recall Train: {recall}")
+print(f"F1 Score Train: {f1}")
+print(f"Kappa Train: {kappa}")
