@@ -1,4 +1,5 @@
 ##Collecting data
+
 import pandas as pd
 
 ##Text preprocessing
@@ -16,21 +17,31 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 ##Gather the dataset for sentiment analysis from the UCI Machine Learning Repository
 # Read text files
-file1 = pd.read_csv("sentiment_labelled_sentences/amazon_cells_labelled.txt", sep="\t", header=None)
-file2 = pd.read_csv("sentiment_labelled_sentences/imdb_labelled.txt", sep="\t", header=None)
-file3 = pd.read_csv("sentiment_labelled_sentences/yelp_labelled.txt", sep="\t", header=None)
+
+file1 = pd.read_csv("sentiment_labelled_sentences/amazon_cells_labelled.txt", delimiter = '\t', quoting = 3, header=None, names=["Phrase", "tag"])
+file2 = pd.read_csv("sentiment_labelled_sentences/imdb_labelled.txt", delimiter = '\t', quoting = 3, header=None, names=["Phrase", "tag"])
+file3 = pd.read_csv("sentiment_labelled_sentences/yelp_labelled.txt", delimiter = '\t', quoting = 3, header=None, names=["Phrase", "tag"])
 
 #Check the size of each read file (incomplete in file2, database source error)
 print("Number of rows in file1:", len(file1))
 print("Number of rows in file2:", len(file2))
+print(file2.tail())
+
 print("Number of rows in file3:", len(file3))
+
+df = file2
+print(df)
 
 # Concatenate the three files
 combined_df = pd.concat([file1, file2, file3], ignore_index=True)
-combined_df.columns = ["Phrase", "tag"]
+
+print(combined_df.columns)
+print(combined_df.shape)
+print(combined_df['tag'].value_counts() / combined_df['tag'].shape[0])
+
 
 #Print initial combined_df
-#print(combined_df)
+print(combined_df)
 
 ##Preprocess the text data, including tokenization, lowercasing, and removing stopwords.
 # Function to clean text (regular expressions)
@@ -58,11 +69,11 @@ X = combined_df['Tokenized_Phrase']
 y = combined_df['tag']
 
 # Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1234)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 #Create a DummyClassifier
 # Strategy: predict the most frequent class
-dummy_clf = DummyClassifier(strategy="most_frequent")  
+dummy_clf = DummyClassifier(strategy="stratified")  
 
 #Train the model
 dummy_clf.fit(X_train, y_train)
