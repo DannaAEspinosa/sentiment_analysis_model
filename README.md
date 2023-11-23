@@ -1,33 +1,25 @@
-# Sentiment Analysis Masterclass 🚀
 
-Explore sentiment analysis prowess using Python magic in a single file!
+# Sentiment Analysis Project 📊
 
-## Dataset 📊
+## Dataset 📂
 
-The **Sentiment Labelled Sentences Dataset** awaits your magic touch! Fetch it [here](https://archive.ics.uci.edu/dataset/331/sentiment+labelled+sentences) and let the sentiment magic begin.
+The project utilizes the "Sentiment Labelled Sentences Dataset" from [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/331/sentiment+labelled+sentences). 
 
----
+### Data Preprocessing 🧹
 
-## Data Preprocessing with NLTK 📝
+The dataset has undergone preprocessing using NLTK for tokenization, lowercasing, and stop-word removal.
 
-Prepare the dataset using NLTK's magic! Tokenize, lowercase, and banish those pesky stop words to unlock the true sentiments hidden within the text.
+## Project Objectives 🎯
 
-## Project Goals 🎯
+1. **Data Preparation:** Preprocessed dataset ready for sentiment analysis exploration.
+2. **Model Implementation:** Vanilla RNN and LSTM models applied for sentiment analysis.
+3. **Dummy Classifier Baseline:** Evaluation using a Dummy Classifier as a baseline.
 
-1. **Data Sorcery:** Prepare and wield the dataset for the ultimate sentiment decoding adventure.
-2. **Model Enchantment:** Cast spells on Vanilla RNN and LSTM models, transforming words into sentiment predictions.
 
----
-
-## Mastering Sentiment in Python 🧙‍♂️
-
-1. **Enchant the Data:** Prepare the dataset in `sentiment_analysis.py` to summon the sentiment spirits.
-2. **Vanilla RNN Magic:** Invoke the Vanilla RNN model and let it weave sentiment spells.
-3. **LSTM Wizardry:** Channel the power of LSTM to unlock deeper sentiment insights.
-
---
-
-### Contributors
-
-- Authors: Danna Espinosa, Diana Balanta, Carlos Bolaños
-
+1. **Data Preparation:** Handled in `sentiment_analysis.py`.
+2. **Dummy Classifier:** Evaluate using a Dummy Classifier for initial performance assessment.
+3. **Vanilla RNN Model:** Implemented in the same file for sentiment analysis.
+4. **LSTM Model:** Also implemented in the same file for deeper sentiment insights.
+   
+## Contributors
+* Danna Espinosa, Diana Balanta, Carlos Bolaños
