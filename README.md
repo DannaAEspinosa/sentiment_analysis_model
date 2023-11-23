@@ -16,15 +16,6 @@ Prepare the dataset using NLTK's magic! Tokenize, lowercase, and banish those pe
 
 1. **Data Sorcery:** Prepare and wield the dataset for the ultimate sentiment decoding adventure.
 2. **Model Enchantment:** Cast spells on Vanilla RNN and LSTM models, transforming words into sentiment predictions.
----
-## Structure of Our Magical Repository 🌟
-|-- 📁 data/
-|-- sentiment_labelled_sentences/
-|-- amazon_cells_labelled.txt
-|-- imdb_labelled.txt
-|-- yelp_labelled.txt
-|-- sentiment_analysis.py
-|-- requirements.txt
 
 ---
 
